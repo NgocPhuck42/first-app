@@ -8,87 +8,74 @@ import { Button, Linking, RefreshControl, ScrollView, StyleSheet, Text, View, Fl
 // import Header from '../Header';
 import {NavigationContainer} from '@react-navigation/native';
 import {createStackNavigator} from '@react-navigation/stack';
+import ScreenA from '../src/ScreenA'
+import ScreenB from '../src/ScreenB'
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import FontAwesome5 from 'react-native-vector-icons/FontAwesome5'
+import { createMaterialBottomTabNavigator } from '@react-navigation/material-bottom-tabs';
+import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
 
 
-const Stack = createStackNavigator();
-
-function ScreenA({navigation}) {
-
-  const onPressHandler = () => {
-    navigation.navigate("Screen 2");
-  }
-
-  return(
-    <View style={styles.body}>
-      <Text style={styles.text}>
-        Màn hình 1
-      </Text>
-      <Pressable
-        onPress={onPressHandler}
-          style={({pressed})=> ({backgroundColor: pressed ? '#b1c1' : '#ff2'})}>
-        <Text style={styles.text}>
-          Chuyển qua trang thứ 2
-        </Text>
-      </Pressable>
-    </View>
-    
-  )
-}
-function ScreenB({navigation}) {
-
-  const onPressHandler = () => {
-    navigation.navigate('Screen 1')
-  }
-  
-  return(
-    <View style={styles.body}>
-      <Text style={styles.text}>
-        Màn hình 2
-      </Text>
-      <Pressable
-        onPress={onPressHandler}
-          style={({pressed})=> ({backgroundColor: pressed ? '#b1c1' : '#ff2'})}>
-        <Text style={styles.text}>
-          Quay về trang thứ 1
-        </Text>
-      </Pressable>
-    </View>
-    
-  )
-}
+// const Tab = createBottomTabNavigator();
+//const Tab = createMaterialBottomTabNavigator();
+const Tab = createMaterialTopTabNavigator();
 
 export default function App(){
   return(
       <NavigationContainer>
-        <Stack.Navigator>
-          <Stack.Screen
+        <Tab.Navigator
+          screenOptions={({route})=> ({
+            tabBarIcon: ({focused, size, color}) => {
+              let iconName;
+              if(route.name==='Screen 1'){
+                iconName='autoprefixer';
+                size=focused ? 20 : 25;
+              //  color=focused ? '#fff222' : '#111';
+              }else if(route.name ==='Screen 2'){
+                iconName='btc';
+                size=focused ? 20 : 25;
+              //  color=focused ? '#fff222' : '#111';
+              }
+              return(
+                <FontAwesome5
+                  name={iconName}
+                  size={size}
+                  color={color}
+                />
+              )
+            }
+
+          })} 
+          tabBarOptions={{
+            activeTintColor: '#fff222',
+            inactiveTintColor: '#555',
+            activeBackgroundColor: '#fff',
+            showIcon: true,
+
+          }}
+          activeColor='#f0edf6'
+          inactiveColor = '#3e2465'
+          barStyle={{backgroundColor: '#694fad'}}
+        >
+          <Tab.Screen
             name= "Screen 1"
             component= {ScreenA}
             options={{
               header: () => null
+              
             }}
           />
-          <Stack.Screen
+          <Tab.Screen
             name= "Screen 2"
             component= {ScreenB}
+            // options={{
+            //   tabBarBadge: 3
+            // }}
           />
-        </Stack.Navigator>
+        </Tab.Navigator>
       </NavigationContainer>
   )
 }
-
-const styles = StyleSheet.create({
-  body:{
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center'
-  },
-  text: {
-    fontSize: 20,
-    textAlign: 'center',
-    margin: 10
-  }
-})
 
 
 // export default function App() {
